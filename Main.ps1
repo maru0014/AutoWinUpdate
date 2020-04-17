@@ -61,7 +61,7 @@ Remove-Item C:\AutoWinUpdate\* -Exclude AutoWinUpdate.log -Recurse
 Write-Host "$(Date -Format g) C:\AutoWinUpdate\フォルダを削除"
 
 $compliteMsg = @"
-[$($config.pcname)] Windows Update 完了
+[$($env:COMPUTERNAME)] Windows Update 完了
 詳細ログは対象PCの C:\AutoWinUpdate\AutoWinUpdate.log をご確認ください
 "@
 
