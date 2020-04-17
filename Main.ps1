@@ -21,10 +21,10 @@ Write-Host "$(Date -Format g) 関数ファイル読み込み : $($PSScriptRoot)/Functions.
 . $PSScriptRoot/Functions.ps1
 
 # 自動ログオン設定
-Enable-AutoLogon $setupUserName $setupUserPass
+Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 
 # スケジューラにログオンスクリプト登録
-Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $setupUserName $setupUserPass
+Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
 if (-Not (Test-Path "$PSScriptRoot/onlyOnce1")) {
   # 検証　Win10 1909をインストール
