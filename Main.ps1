@@ -26,13 +26,6 @@ Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 # スケジューラにログオンスクリプト登録
 Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
-if (-Not (Test-Path "$PSScriptRoot/onlyOnce1")) {
-  # 検証　Win10 1909をインストール
-  New-Item "$PSScriptRoot/onlyOnce1"
-  Write-Host "$(Date -Format g) Windows10 $($winver) → 1909アップグレード実行"
-  Start-Process -FilePath ($PSScriptRoot + "/1909/setup.exe") -argumentList "/Auto Upgrade" -Wait
-}
-
 if ($config.upgradeWindows) {
   $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
   if ($winver -ne "1909") {
