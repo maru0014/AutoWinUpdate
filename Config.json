@@ -1,0 +1,14 @@
+[
+  {
+    "upgradeWindows": true,
+    "setupUser": {
+      "name": "setup",
+      "pass": "Setup1234"
+    },
+    "notifier": {
+      "chat": "slack",
+      "url": "https://hooks.slack.com/services/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",
+      "token": ""
+    }
+  }
+]
