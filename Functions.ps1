@@ -491,6 +491,7 @@ function Join-Group2( $UserID, $JoinGroup ) {
     $Group.Add($User.Path)
 }
 
+
 ################################################
 # スタートアップ時の拡張PINを有効化
 ################################################
@@ -506,6 +507,8 @@ function Enable-SaveRecoveryPassInAD {
       Set-Registry $RegPath "UseEnhancedPin" "DWord" 1
     }
 }
+
+
 ################################################
 # スタートアップ時の拡張PINを有効化
 ################################################
@@ -539,6 +542,7 @@ function Enable-StartupPin {
     }
 }
 
+
 ################################################
 # ネットワークドライブの割り当て
 ################################################
@@ -558,6 +562,7 @@ function Add-NetworkDrive($driveLetter, $drivePath, $userName, $userPass) {
     }
 }
 
+
 ################################################
 # key.txt と encryptedtxt ファイルからパスワードを復号化
 ################################################
@@ -573,6 +578,7 @@ function Decryption-Password($keyFilePath, $encryptedFilePath ) {
   $StringPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
   return $StringPassword
 }
+
 
 ################################################
 # Pause 機能追加

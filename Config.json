@@ -7,7 +7,7 @@
     },
     "notifier": {
       "chat": "slack",
-      "url": "https://hooks.slack.com/services/xxxx/xxxx/xxxx",
+      "url": "https://hooks.slack.com/services/xxxx/xxxx/xxxxx",
       "token": ""
     }
   }
