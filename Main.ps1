@@ -29,6 +29,9 @@ Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name 
 if ($config.upgradeWindows) {
   $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
   if ($winver -ne "1909") {
+    # Win10 1809をインストール
+    Write-Host "$(Date -Format g) Windows10 $($winver) → 1809アップグレード実行"
+    Start-Process -FilePath ($PSScriptRoot + "/1809/setup.exe") -argumentList "/Auto Upgrade" -Wait
     # Win10 1909をインストール
     Write-Host "$(Date -Format g) Windows10 $($winver) → 1909アップグレード実行"
     Start-Process -FilePath ($PSScriptRoot + "/1909/setup.exe") -argumentList "/Auto Upgrade" -Wait

@@ -187,9 +187,7 @@ function Send-Chat($msg, $chat, $url, $token) {
     $utf8Bytes = [System.Text.Encoding]::UTF8.GetBytes($msg)
 
     if ($chat -eq "slack") {
-        $notificationPayload = @{
-            text     = $enc.GetString($utf8Bytes)
-        }
+        $notificationPayload = @{text = $enc.GetString($utf8Bytes)}
         Invoke-RestMethod -Uri $url -Method Post -Body (ConvertTo-Json $notificationPayload)
     }
     elseif ($chat -eq "chatwork") {
@@ -197,13 +195,16 @@ function Send-Chat($msg, $chat, $url, $token) {
         Invoke-RestMethod -Uri $url -Method POST -Headers @{"X-ChatWorkToken" = $token } -Body "body=$body"
     }
     elseif ($chat -eq "teams") {
-        $body = ConvertTo-JSON @{
-            text = $msg
-        }
+        $body = ConvertTo-JSON @{text = $msg}
         $postBody = [Text.Encoding]::UTF8.GetBytes($body)
         Invoke-RestMethod -Uri $url -Method Post -ContentType 'application/json' -Body $postBody
     }
+    elseif ($chat -eq "hangouts") {
+        $notificationPayload = @{text = $msg}
+        Invoke-RestMethod -Uri $url -Method Post -ContentType 'application/json; charset=UTF-8' -Body (ConvertTo-Json $notificationPayload)
+    }
 }
+
 
 
 ################################################
