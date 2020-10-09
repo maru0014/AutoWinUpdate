@@ -36,8 +36,7 @@ if ($config.upgradeWindows) {
 }
 
 Write-Host "`r`n***************** 最新までWindows Update *****************" -ForeGroundColor green
-Run-WindowsUpdate
-Run-WindowsUpdate
+Run-LegacyWindowsUpdate "Full"
 
 
 # Taskを削除
