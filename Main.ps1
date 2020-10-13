@@ -1,64 +1,73 @@
-# ãƒ­ã‚°å‡ºåŠ›é–‹å§‹
+# ƒƒOo—ÍŠJn
 Start-Transcript "$PSScriptRoot/AutoWinUpdate.log" -append
 
 Write-Host @"
 *********************************************************
 *
 * Windows10 Auto Updating Script / Main.ps1
-* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ : 1.01
-* æœ€çµ‚æ›´æ–°æ—¥ : 2020/04/20
+* ƒo[ƒWƒ‡ƒ“ : 1.20
+* ÅIXV“ú : 2020/10/13
 *
 "@ -ForeGroundColor green
 
-Write-Host "$(Date -Format g) å®Ÿè¡Œä¸­ã®ãƒ¦ãƒ¼ã‚¶ : " $env:USERNAME
+Write-Host "$(Get-Date -Format g) Às’†‚Ìƒ†[ƒU : " $env:USERNAME
 
-# è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
-Write-Host "$(Date -Format g) è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ : $($PSScriptRoot)/Config.json"
+# İ’èƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+Write-Host "$(Get-Date -Format g) İ’èƒtƒ@ƒCƒ‹“Ç‚İ‚İ : $($PSScriptRoot)/Config.json"
 $config = Get-Content "$PSScriptRoot/Config.json" -Encoding UTF8 | ConvertFrom-Json
 
-# é–¢æ•°ã®èª­ã¿è¾¼ã¿
-Write-Host "$(Date -Format g) é–¢æ•°ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ : $($PSScriptRoot)/Functions.ps1"
+# ŠÖ”‚Ì“Ç‚İ‚İ
+Write-Host "$(Get-Date -Format g) ŠÖ”ƒtƒ@ƒCƒ‹“Ç‚İ‚İ : $($PSScriptRoot)/Functions.ps1"
 . $PSScriptRoot/Functions.ps1
 
-# è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³è¨­å®š
+# ©“®ƒƒOƒIƒ“İ’è
 Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 
-# ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ã«ãƒ­ã‚°ã‚ªãƒ³ã‚¹ã‚¯ãƒªãƒ—ãƒˆç™»éŒ²
+# ƒXƒPƒWƒ…[ƒ‰‚ÉƒƒOƒIƒ“ƒXƒNƒŠƒvƒg“o˜^
 Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
 if ($config.upgradeWindows) {
   $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
-  if (2004 -gt $winver) {
-    # Win10 2004ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
-    Write-Host "$(Date -Format g) Windows10 $($winver) â†’ 2004ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰å®Ÿè¡Œ"
-    Start-Process -FilePath ($PSScriptRoot + "/2004/setup.exe") -argumentList "/Auto Upgrade" -Wait
+  if (1909 -gt $winver) {
+    # 1909–¢–‚Ìƒo[ƒWƒ‡ƒ“‚Ìê‡1909‚ğƒCƒ“ƒXƒg[ƒ‹
+    Write-Host "$(Get-Date -Format g) Windows10 $($winver) ¨ 1909ƒAƒbƒvƒOƒŒ[ƒhÀs"
+    Start-Process -FilePath ($PSScriptRoot + "/1909/setup.exe") -argumentList "/Auto Upgrade" -Wait
   }
 }
 
-Write-Host "`r`n***************** æœ€æ–°ã¾ã§Windows Update *****************" -ForeGroundColor green
-Run-LegacyWindowsUpdate "Full"
+Write-Host "`r`n***************** ÅV‚Ü‚ÅWindows Update *****************" -ForeGroundColor green
+Install-Module -Name PSWindowsUpdate -Force
+Import-Module -Name PSWindowsUpdate
+Install-WindowsUpdate -AcceptAll -AutoReboot
+
+# Run-LegacyWindowsUpdate "Full"
+# Run-WindowsUpdate
 
 
-# Taskã‚’å‰Šé™¤
+# Task‚ğíœ
 if (Test-Task "AutoWinUpdate") {
   Remove-Task "AutoWinUpdate"
-  Write-Host "$(Date -Format g) ãƒ­ã‚°ã‚ªãƒ³ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’è§£é™¤"
+  Write-Host "$(Get-Date -Format g) ƒƒOƒIƒ“ƒXƒNƒŠƒvƒg‚ğ‰ğœ"
 }
 
-# è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³ç„¡åŠ¹åŒ–
+# ©“®ƒƒOƒIƒ“–³Œø‰»
 Disable-AutoLogon
 
-# AutoWinUpdate.log ä»¥å¤–ã® AutoWinUpdateãƒ•ã‚©ãƒ«ãƒ€é…ä¸‹ã‚’å‰Šé™¤
+# AutoWinUpdate.log ˆÈŠO‚Ì AutoWinUpdateƒtƒHƒ‹ƒ_”z‰º‚ğíœ
 Remove-Item C:\AutoWinUpdate\* -Exclude AutoWinUpdate.log -Recurse
-Write-Host "$(Date -Format g) C:\AutoWinUpdate\ãƒ•ã‚©ãƒ«ãƒ€ã‚’å‰Šé™¤"
+Write-Host "$(Get-Date -Format g) C:\AutoWinUpdate\ƒtƒHƒ‹ƒ_‚ğíœ"
 
 $compliteMsg = @"
-[$($env:COMPUTERNAME)] Windows Update å®Œäº†
-è©³ç´°ãƒ­ã‚°ã¯å¯¾è±¡PCã® C:\AutoWinUpdate\AutoWinUpdate.log ã‚’ã”ç¢ºèªãã ã•ã„
+[$($env:COMPUTERNAME)] Windows Update Š®—¹
+Ú×ƒƒO‚Í‘ÎÛPC‚Ì C:\AutoWinUpdate\AutoWinUpdate.log ‚ğ‚²Šm”F‚­‚¾‚³‚¢
 "@
 
-# ã‚­ãƒƒãƒ†ã‚£ãƒ³ã‚°å®Œäº†ã‚’ãƒãƒ£ãƒƒãƒˆã«é€šçŸ¥
+# ƒLƒbƒeƒBƒ“ƒOŠ®—¹‚ğƒ`ƒƒƒbƒg‚É’Ê’m
 Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifier.token
 
-# ãƒ­ã‚°å‡ºåŠ›çµ‚äº†
+# ƒƒOo—ÍI—¹
+Stop-Transcript
+Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifier.token
+
+# ƒƒOo—ÍI—¹
 Stop-Transcript

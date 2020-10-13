@@ -1,12 +1,12 @@
 
 
 ################################################
-# ãƒ‰ãƒ¡ã‚¤ãƒ³ã«å‚åŠ 
+# ƒhƒƒCƒ“‚ÉQ‰Á
 ################################################
 function Join-Domain($domainName, $userName, $userPass, $ouPath) {
-    Write-Host "ãƒ‰ãƒ¡ã‚¤ãƒ³ : $($domainName)" -ForeGroundColor Yellow
-    Write-Host "ãƒ¦ãƒ¼ã‚¶ãƒ¼ : $($userName)" -ForeGroundColor Yellow
-    # ãƒ‰ãƒ¡ã‚¤ãƒ³å‚åŠ 
+    Write-Host "ƒhƒƒCƒ“ : $($domainName)" -ForeGroundColor Yellow
+    Write-Host "ƒ†[ƒU[ : $($userName)" -ForeGroundColor Yellow
+    # ƒhƒƒCƒ“Q‰Á
     $pwd = ConvertTo-SecureString -AsPlainText -Force $userPass
     $cred = New-Object System.Management.Automation.PSCredential($userName, $pwd)
 
@@ -21,7 +21,7 @@ function Join-Domain($domainName, $userName, $userPass, $ouPath) {
 
 
 ################################################
-# ãƒ¦ãƒ¼ã‚¶ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+# ƒ†[ƒU‚Ì‘¶İƒ`ƒFƒbƒN
 ################################################
 function Test-User($username) {
     $localusers = Get-WmiObject Win32_UserAccount | Where-Object { $_.LocalAccount -eq $true }
@@ -36,7 +36,7 @@ function Test-User($username) {
 
 
 ################################################
-# è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³æœ‰åŠ¹åŒ–
+# ©“®ƒƒOƒIƒ“—LŒø‰»
 ################################################
 function Enable-AutoLogon($LogonUser, $LogonPass, $LogonDomain) {
     <#
@@ -48,7 +48,7 @@ function Enable-AutoLogon($LogonUser, $LogonPass, $LogonDomain) {
     $AutoAdminLogon = Get-Registry "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" "AutoAdminLogon"
     $DefaultUsername = Get-Registry "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" "DefaultUsername"
     if (($AutoAdminLogon -ne 1) -Or ($DefaultUsername -ne $LogonUser)) {
-        Write-Host "$(Get-Date -Format g) ãƒ¦ãƒ¼ã‚¶ãƒ¼$($LogonUser)ã®è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³ã‚’æœ‰åŠ¹åŒ–"
+        Write-Host "$(Get-Date -Format g) ƒ†[ƒU[$($LogonUser)‚Ì©“®ƒƒOƒIƒ“‚ğ—LŒø‰»"
         $RegLogonKey = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
         Set-ItemProperty -path $RegLogonKey -name "AutoAdminLogon" -value 1
         Set-ItemProperty -path $RegLogonKey -name "DefaultUsername" -value $LogonUser
@@ -61,7 +61,7 @@ function Enable-AutoLogon($LogonUser, $LogonPass, $LogonDomain) {
 
 
 ################################################
-# è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³ç„¡åŠ¹åŒ–
+# ©“®ƒƒOƒIƒ“–³Œø‰»
 ################################################
 function Disable-AutoLogon() {
     <#
@@ -79,22 +79,22 @@ function Disable-AutoLogon() {
 
 
 ################################################
-# ã‚¿ã‚¹ã‚¯ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+# ƒ^ƒXƒN‚Ì‘¶İƒ`ƒFƒbƒN
 ################################################
 function Test-Task($TaskName) {
     <#
     .SYNOPSIS
-    ã‚¿ã‚¹ã‚¯ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+    ƒ^ƒXƒN‚Ì‘¶İƒ`ƒFƒbƒN
 
     .DESCRIPTION
-    ã‚¿ã‚¹ã‚¯åã‚’å—ã‘å–ã£ã¦ã‚¿ã‚¹ã‚¯ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©å†…ã«å­˜åœ¨ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
-    å­˜åœ¨ã™ã‚‹å ´åˆã¯%trueã€å­˜åœ¨ã—ãªã„å ´åˆã¯$falseã‚’è¿”ã—ã¾ã™
+    ƒ^ƒXƒN–¼‚ğó‚¯æ‚Á‚Äƒ^ƒXƒNƒXƒPƒWƒ…[ƒ‰“à‚É‘¶İ‚·‚é‚©ƒ`ƒFƒbƒN
+    ‘¶İ‚·‚éê‡‚Í%trueA‘¶İ‚µ‚È‚¢ê‡‚Í$false‚ğ•Ô‚µ‚Ü‚·
 
     .EXAMPLE
-    Test-Task "è‡ªå‹•ãƒ­ã‚°ã‚ªãƒ³"
+    Test-Task "©“®ƒƒOƒIƒ“"
 
     .PARAMETER TaskName
-    Stringå‹ã§ã‚¿ã‚¹ã‚¯ã®åå‰ã‚’æŒ‡å®š
+    StringŒ^‚Åƒ^ƒXƒN‚Ì–¼‘O‚ğw’è
 
     #>
 
@@ -117,11 +117,11 @@ function Test-Task($TaskName) {
 
 
 ################################################
-# ã‚¿ã‚¹ã‚¯ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ç™»éŒ²
+# ƒ^ƒXƒNƒXƒPƒWƒ…[ƒ‰“o˜^
 ################################################
 function Register-Task($TaskName, $exePath, $TaskExecuteUser, $TaskExecutePass, $visble) {
     if (-not (Test-Task $TaskName)) {
-        Write-Host "$(Get-Date -Format g) ã‚¿ã‚¹ã‚¯ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ã«ç™»éŒ²:$($TaskName)"
+        Write-Host "$(Get-Date -Format g) ƒ^ƒXƒNƒXƒPƒWƒ…[ƒ‰‚É“o˜^:$($TaskName)"
         $trigger = New-ScheduledTaskTrigger -AtLogon
         $action = New-ScheduledTaskAction -Execute $exePath
         $principal = New-ScheduledTaskPrincipal -UserID $TaskExecuteUser -LogonType ServiceAccount -RunLevel Highest
@@ -132,7 +132,7 @@ function Register-Task($TaskName, $exePath, $TaskExecuteUser, $TaskExecutePass, 
 
 
 ################################################
-# ã‚¿ã‚¹ã‚¯ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©å‰Šé™¤
+# ƒ^ƒXƒNƒXƒPƒWƒ…[ƒ‰íœ
 ################################################
 function Remove-Task($TaskName) {
 
@@ -143,72 +143,26 @@ function Remove-Task($TaskName) {
         Get-ScheduledTask | Where-Object { $_.TaskName -match $TaskName } | Unregister-ScheduledTask -Confirm:$false
     }
 
-    Write-Output "$(Get-Date -Format g) $($TaskName)ã‚’ã‚¿ã‚¹ã‚¯ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ã‹ã‚‰å‰Šé™¤"
+    Write-Output "$(Get-Date -Format g) $($TaskName)‚ğƒ^ƒXƒNƒXƒPƒWƒ…[ƒ‰‚©‚çíœ"
 
 }
 
 
-################################################
-# è‡ªå‹•ã§Windowsã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚’æœ€æ–°ã¾ã§å®Ÿè¡Œ
-################################################
-function Start-WindowsUpdate() {
-    $errorMsg = ""
-    $errorCount = 0
-    $updates = Start-WUScan -SearchCriteria "IsInstalled=0 AND IsHidden=0 AND IsAssigned=1"
-
-    # åˆ©ç”¨å¯èƒ½ãªæ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãŒ0ä»¶ã«ãªã‚‹ã¾ã§ç¹°ã‚Šè¿”ã™
-    while (($updates.Count -ne 0) -And ($errorCount -lt 2)) {
-        Write-Host "$(Get-Date -Format g) $($updates.Count)ä»¶ã®æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãŒåˆ©ç”¨å¯èƒ½"
-
-        foreach ($update in $updates) {
-            Write-Host "$(Get-Date -Format g) $($update.Title)"
-            try {
-                Install-WUUpdates -Updates $update -ErrorAction Stop
-            }
-            catch {
-                $errorCount++
-                Write-Error $_.Exception
-                Write-Host "$(Get-Date -Format g) [Error $($errorCount)] $($update.Title)" -ForegroundColor Yellow
-                $errorMsg = $errorMsg + "$(Get-Date -Format g) [æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã«å¤±æ•—] $($update.Title)`r`n"
-            }
-        }
-
-        if (Get-WUIsPendingReboot) {
-            # å†èµ·å‹•ãŒå¿…è¦ãªå ´åˆã¯å†èµ·å‹•
-            Write-Host "$(Get-Date -Format g) æ›´æ–°ã‚’å®Œäº†ã™ã‚‹ãŸã‚å†èµ·å‹•ã—ã¾ã™"
-            Restart-Computer -Force
-            Exit
-        }
-
-        Write-Host "$(Get-Date -Format g) æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å†ãƒã‚§ãƒƒã‚¯"
-        $updates = Start-WUScan
-
-    }
-
-    if ($errorCount -eq 2) {
-        return $errorMsg
-    }
-    else {
-        return "Windows Update å®Œäº†"
-    }
-
-}
-
 
 ################################################
-# è‡ªå‹•ã§Windowsã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚’æœ€æ–°ã¾ã§å®Ÿè¡Œ(ãƒ¬ã‚¬ã‚·ãƒ¼)
+# ©“®‚ÅWindowsƒAƒbƒvƒf[ƒg‚ğÅV‚Ü‚ÅÀs
 ################################################
-function Run-LegacyWindowsUpdate($Option) {
+function Start-WindowsUpdate($Option) {
 
-    # æœ€å¤§é©ç”¨æ›´æ–°æ•°
+    # Å‘å“K—pXV”
     $G_MaxUpdateNumber = 100
 
     Write-Host "$(Get-Date -Format g) --- Running Windows Update ---"
-    Write-Host "$(Get-Date -Format g) æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ç¢ºèª..."
+    Write-Host "$(Get-Date -Format g) XVƒvƒƒOƒ‰ƒ€‚ğŠm”F..."
     $updateSession = new-object -com "Microsoft.Update.Session"
     $updateSearcher = $updateSession.CreateupdateSearcher()
 
-    # ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚¿ã‚¤ãƒ—ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+    # ƒAƒbƒvƒf[ƒgƒ^ƒCƒvƒRƒ“ƒgƒ[ƒ‹
     if ( $Option -match "ful" ) {
         Write-Host "$(Get-Date -Format g) Type: Full Update"
         $Option = "Full"
@@ -221,10 +175,10 @@ function Run-LegacyWindowsUpdate($Option) {
     }
 
 
-    Write-Host "$(Get-Date -Format g) åˆ©ç”¨å¯èƒ½ãªæ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ :"
+    Write-Host "$(Get-Date -Format g) —˜—p‰Â”\‚ÈXVƒvƒƒOƒ‰ƒ€:"
     if ($searchResult.Updates.Count -eq 0) {
-        Write-Host "$(Get-Date -Format g) åˆ©ç”¨å¯èƒ½ãªæ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ã‚ã‚Šã¾ã›ã‚“"
-        Write-Host "$(Get-Date -Format g) Windows Update å®Œäº†"
+        Write-Host "$(Get-Date -Format g) —˜—p‰Â”\‚ÈXVƒvƒƒOƒ‰ƒ€‚Í‚ ‚è‚Ü‚¹‚ñ"
+        Write-Host "$(Get-Date -Format g) Windows Update Š®—¹"
     }
     else {
         $downloadReq = $False
@@ -242,16 +196,16 @@ function Run-LegacyWindowsUpdate($Option) {
             }
         }
         if ( $downloadReq ) {
-            Write-Host "$(Get-Date -Format g) ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ãƒªã‚¹ãƒˆã‚’ä½œæˆ..."
+            Write-Host "$(Get-Date -Format g) ƒ_ƒEƒ“ƒ[ƒhƒŠƒXƒg‚ğì¬..."
             $updatesToDownload = new-object -com "Microsoft.Update.UpdateColl"
             foreach ($update in $searchResult.Updates) {
                 $updatesToDownload.Add($update) | out-null
             }
-            Write-Host "$(Get-Date -Format g) ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰..."
+            Write-Host "$(Get-Date -Format g) ƒ_ƒEƒ“ƒ[ƒh..."
             $downloader = $updateSession.CreateUpdateDownloader()
             $downloader.Updates = $updatesToDownload
             $downloader.Download()
-            Write-Host "$(Get-Date -Format g) ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿:"
+            Write-Host "$(Get-Date -Format g) ƒ_ƒEƒ“ƒ[ƒhÏ‚İ:"
             $i = 0
             foreach ($update in $searchResult.Updates) {
                 $i++
@@ -266,10 +220,10 @@ function Run-LegacyWindowsUpdate($Option) {
             }
         }
         else {
-            Write-Host "$(Get-Date -Format g) å…¨ã¦ã®æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ"
+            Write-Host "$(Get-Date -Format g) ‘S‚Ä‚ÌXVƒvƒƒOƒ‰ƒ€‚ğƒ_ƒEƒ“ƒ[ƒh‚µ‚Ü‚µ‚½"
         }
         $updatesToInstall = new-object -com "Microsoft.Update.UpdateColl"
-        Write-Host "$(Get-Date -Format g) ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’ä½œæˆ..."
+        Write-Host "$(Get-Date -Format g) ƒCƒ“ƒXƒg[ƒ‹ƒŠƒXƒg‚ğì¬..."
         $i = 0
         foreach ($update in $searchResult.Updates) {
             if ( $update.IsDownloaded ) {
@@ -278,34 +232,34 @@ function Run-LegacyWindowsUpdate($Option) {
                 $UpdateTitol = $update.Title
                 Write-Host "$(Get-Date -Format g) $i / $G_MaxUpdateNumber : $UpdateTitol (Install)"
                 if ( $i -ge $G_MaxUpdateNumber ) {
-                    Write-Host "$(Get-Date -Format g) æ›´æ–°æ•°ã®ä¸Šé™ï¼š $G_MaxUpdateNumber"
+                    Write-Host "$(Get-Date -Format g) XV”‚ÌãŒÀF $G_MaxUpdateNumber"
                     break
                 }
             }
         }
         if ( $updatesToInstall.Count -eq 0 ) {
-            Write-Host "$(Get-Date -Format g) ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“"
-            Write-Host "$(Get-Date -Format g) ç•°å¸¸çµ‚äº†"
+            Write-Host "$(Get-Date -Format g) ƒCƒ“ƒXƒg[ƒ‹‚Ì€”õ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ"
+            Write-Host "$(Get-Date -Format g) ˆÙíI—¹"
         }
         else {
             $InstallCount = $updatesToInstall.Count
-            Write-Host "$(Get-Date -Format g) $InstallCount ä»¶ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ..."
+            Write-Host "$(Get-Date -Format g) $InstallCount Œ‚ÌƒAƒbƒvƒf[ƒg..."
             $installer = $updateSession.CreateUpdateInstaller()
             $installer.Updates = $updatesToInstall
             $installationResult = $installer.Install()
             if ( $installationResult.ResultCode -eq 2 ) {
-                Write-Host "$(Get-Date -Format g) å…¨ã¦ã®æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å®Œäº†"
+                Write-Host "$(Get-Date -Format g) ‘S‚Ä‚ÌXVƒvƒƒOƒ‰ƒ€‚ğƒCƒ“ƒXƒg[ƒ‹Š®—¹"
             }
             else {
-                Write-Host "$(Get-Date -Format g) ä¸€éƒ¨ã®æ›´æ–°ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸ"
+                Write-Host "$(Get-Date -Format g) ˆê•”‚ÌXVƒvƒƒOƒ‰ƒ€‚ğƒCƒ“ƒXƒg[ƒ‹o—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½"
             }
             if ( $installationResult.RebootRequired ) {
-                Write-Host "$(Get-Date -Format g) ä¸€ã¤ä»¥ä¸Šã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã§å†èµ·å‹•ãŒå¿…è¦ã§ã™ 10ç§’å¾Œã«å†èµ·å‹•ã—ã¾ã™"
+                Write-Host "$(Get-Date -Format g) ˆê‚ÂˆÈã‚ÌƒAƒbƒvƒf[ƒg‚ÅÄ‹N“®‚ª•K—v‚Å‚· 10•bŒã‚ÉÄ‹N“®‚µ‚Ü‚·"
                 Start-Sleep 10
                 Restart-Computer -Force
             }
             else {
-                Write-Host "$(Get-Date -Format g) Windows Update ã‚’å®Œäº†ã—ã¾ã—ãŸã€‚å†èµ·å‹•ã¯å¿…è¦ã‚ã‚Šã¾ã›ã‚“ã€‚"
+                Write-Host "$(Get-Date -Format g) Windows Update ‚ğŠ®—¹‚µ‚Ü‚µ‚½BÄ‹N“®‚Í•K—v‚ ‚è‚Ü‚¹‚ñB"
                 Write-Host "$(Get-Date -Format g) =-=-=-=-=- Windows Update finished -=-=-=-=-="
             }
         }
@@ -316,7 +270,7 @@ function Run-LegacyWindowsUpdate($Option) {
 
 
 ################################################
-# ãƒãƒ£ãƒƒãƒˆé€ä¿¡
+# ƒ`ƒƒƒbƒg‘—M
 ################################################
 function Send-Chat($msg, $chat, $url, $token) {
     $enc = [System.Text.Encoding]::GetEncoding('ISO-8859-1')
@@ -343,23 +297,23 @@ function Send-Chat($msg, $chat, $url, $token) {
 
 
 ################################################
-# ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã‚’å‚ç…§
+# ƒŒƒWƒXƒgƒŠ‚ğQÆ
 ################################################
 function Get-Registry( $RegPath, $RegKey ) {
-    # ãƒ¬ã‚¸ã‚¹ãƒˆãƒªãã®ã‚‚ã®ã®æœ‰ç„¡ç¢ºèª
+    # ƒŒƒWƒXƒgƒŠ‚»‚Ì‚à‚Ì‚Ì—L–³Šm”F
     if ( -not (Test-Path $RegPath )) {
         Write-Host  "$RegPath not found."
         return $null
     }
 
-    # Keyæœ‰ç„¡ç¢ºèª
+    # Key—L–³Šm”F
     $Result = Get-ItemProperty $RegPath -name $RegKey -ErrorAction SilentlyContinue
 
-    # ã‚­ãƒ¼ãŒã‚ã£ãŸæ™‚
+    # ƒL[‚ª‚ ‚Á‚½
     if ( $null -ne $Result ) {
         return $Result.$RegKey
     }
-    # ã‚­ãƒ¼ãŒç„¡ã‹ã£ãŸæ™‚
+    # ƒL[‚ª–³‚©‚Á‚½
     else {
         return $null
     }
@@ -367,10 +321,10 @@ function Get-Registry( $RegPath, $RegKey ) {
 
 
 ################################################
-# ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã‚’è¿½åŠ /æ›´æ–°
+# ƒŒƒWƒXƒgƒŠ‚ğ’Ç‰Á/XV
 ################################################
 function Set-Registry( $Path, $Key, $Type, $Value ) {
-    # ãƒ¬ã‚¸ã‚¹ãƒˆãƒªãã®ã‚‚ã®ã®æœ‰ç„¡ç¢ºèª
+    # ƒŒƒWƒXƒgƒŠ‚»‚Ì‚à‚Ì‚Ì—L–³Šm”F
     $Elements = $Path -split "\\"
     $Path = ""
     $FirstLoop = $True
@@ -388,16 +342,16 @@ function Set-Registry( $Path, $Key, $Type, $Value ) {
         }
     }
 
-    # Keyæœ‰ç„¡ç¢ºèª
+    # Key—L–³Šm”F
     $Result = Get-ItemProperty $Path -name $Key -ErrorAction SilentlyContinue
-    # ã‚­ãƒ¼ãŒã‚ã£ãŸæ™‚
+    # ƒL[‚ª‚ ‚Á‚½
     if ( $null -ne $Result ) {
         Write-Host "$(Get-Date -Format g) [Update Registry Value] $Path $Key $Value"
         Set-ItemProperty $Path -name $Key -Value $Value
     }
-    # ã‚­ãƒ¼ãŒç„¡ã‹ã£ãŸæ™‚
+    # ƒL[‚ª–³‚©‚Á‚½
     else {
-        # ã‚­ãƒ¼ã‚’è¿½åŠ ã™ã‚‹
+        # ƒL[‚ğ’Ç‰Á‚·‚é
         Write-Host "$(Get-Date -Format g) [Add Registry Value] $Path $Key $Value"
         New-ItemProperty $Path -name $Key -PropertyType $Type -Value $Value
     }
@@ -406,7 +360,7 @@ function Set-Registry( $Path, $Key, $Type, $Value ) {
 
 
 ################################################
-# ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæ–°è¦ä½œæˆ
+# ƒAƒJƒEƒ“ƒgV‹Kì¬
 ################################################
 function Create-User( $UserID, $Password ) {
     $hostname = hostname
@@ -418,7 +372,7 @@ function Create-User( $UserID, $Password ) {
 
 
 ################################################
-# ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ç„¡æœŸé™è¨­å®š
+# ƒpƒXƒ[ƒh–³ŠúŒÀİ’è
 ################################################
 function DontExpire-Password( $UserID ) {
     $hostname = hostname
@@ -431,7 +385,7 @@ function DontExpire-Password( $UserID ) {
 
 
 ################################################
-# ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰æ›´æ–°
+# ƒpƒXƒ[ƒhXV
 ################################################
 function Update-Password( $UserID, $Password ) {
     $hostname = hostname
@@ -442,7 +396,7 @@ function Update-Password( $UserID, $Password ) {
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒå­˜åœ¨ã™ã‚‹ã‹
+# ƒ[ƒJƒ‹ƒ†[ƒU[‚ª‘¶İ‚·‚é‚©
 ################################################
 function Test-LocalUser( $UserID ) {
     $hostname = hostname
@@ -453,7 +407,7 @@ function Test-LocalUser( $UserID ) {
 
 
 ################################################
-# ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒå­˜åœ¨ã™ã‚‹ã‹
+# ƒhƒƒCƒ“ƒ†[ƒU[‚ª‘¶İ‚·‚é‚©
 ################################################
 function Test-ADUserAccount( $DomainName, $DomainUser ) {
     $ADUser = [ADSI]("WinNT://$DomainName/$DomainUser")
@@ -467,7 +421,7 @@ function Test-ADUserAccount( $DomainName, $DomainUser ) {
 
 
 ###########################################################
-# ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ¦ãƒ¼ã‚¶ãƒ¼/ãƒ‰ãƒ¡ã‚¤ãƒ³ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ 
+# ƒhƒƒCƒ“ƒ†[ƒU[/ƒhƒƒCƒ“ƒOƒ‹[ƒv‚Ìƒ[ƒJƒ‹ƒOƒ‹[ƒvQ‰Á
 ###########################################################
 function Join-ADUser2Group( $DomainName, $DomainUser, $LocalGroup ) {
     $HostName = hostname
@@ -478,7 +432,7 @@ function Join-ADUser2Group( $DomainName, $DomainUser, $LocalGroup ) {
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚°ãƒ«ãƒ¼ãƒ—é›¢è„±
+# ƒ[ƒJƒ‹ƒ†[ƒU[‚ÌƒOƒ‹[ƒv—£’E
 ################################################
 function Defection-LocalAccunt( $UserID, $GroupName ) {
     $hostname = hostname
@@ -490,7 +444,7 @@ function Defection-LocalAccunt( $UserID, $GroupName ) {
 
 
 #############################################################
-# ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ¦ãƒ¼ã‚¶ãƒ¼/ãƒ‰ãƒ¡ã‚¤ãƒ³ã‚°ãƒ«ãƒ¼ãƒ—ã®ã‚°ãƒ«ãƒ¼ãƒ—é›¢è„±
+# ƒhƒƒCƒ“ƒ†[ƒU[/ƒhƒƒCƒ“ƒOƒ‹[ƒv‚ÌƒOƒ‹[ƒv—£’E
 #############################################################
 function Defection-DomainAccunt( $DomainName, $DomainUser, $LocalGroup ) {
     $HostName = hostname
@@ -501,7 +455,7 @@ function Defection-DomainAccunt( $DomainName, $DomainUser, $LocalGroup ) {
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒ¡ãƒ³ãƒãƒ¼ã«ãªã£ã¦ã„ã‚‹ã‹
+# ƒ[ƒJƒ‹ƒ†[ƒU[‚ªƒƒ“ƒo[‚É‚È‚Á‚Ä‚¢‚é‚©
 ################################################
 function Test-MemberLocalAccunt( $UserID, $GroupName ) {
     $hostname = hostname
@@ -513,7 +467,7 @@ function Test-MemberLocalAccunt( $UserID, $GroupName ) {
 
 
 ################################################
-# ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒ¡ãƒ³ãƒãƒ¼ã«ãªã£ã¦ã„ã‚‹ã‹
+# ƒhƒƒCƒ“ƒ†[ƒU[‚ªƒƒ“ƒo[‚É‚È‚Á‚Ä‚¢‚é‚©
 ################################################
 function Test-MemberDomainAccunt( $DomainName, $DomainUser, $LocalGroupName ) {
     if ( Test-Group $LocalGroupName ) {
@@ -523,14 +477,14 @@ function Test-MemberDomainAccunt( $DomainName, $DomainUser, $LocalGroupName ) {
         return $LocalGroup.IsMember($ADUser.ADsPath)
     }
     else {
-        Write-Host "$(Get-Date -Format g) ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ— $LocalGroupName ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
+        Write-Host "$(Get-Date -Format g) ƒ[ƒJƒ‹ƒOƒ‹[ƒv $LocalGroupName ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ"
         return $false
     }
 }
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—ãƒ¡ãƒ³ãƒãƒ¼å–å¾—
+# ƒ[ƒJƒ‹ƒOƒ‹[ƒvƒƒ“ƒo[æ“¾
 ################################################
 function Get-ListLocalGroupMember( $GroupName ) {
     $hostname = hostname
@@ -544,7 +498,7 @@ function Get-ListLocalGroupMember( $GroupName ) {
 
 
 ################################################
-# ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç„¡åŠ¹
+# ƒAƒJƒEƒ“ƒg–³Œø
 ################################################
 function Disable-Account( $UserID ) {
     $hostname = hostname
@@ -557,7 +511,7 @@ function Disable-Account( $UserID ) {
 
 
 ################################################
-# ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæœ‰åŠ¹
+# ƒAƒJƒEƒ“ƒg—LŒø
 ################################################
 function Enable-Account( $UserID ) {
     $hostname = hostname
@@ -572,7 +526,7 @@ function Enable-Account( $UserID ) {
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—æ–°è¦ä½œæˆ
+# ƒ[ƒJƒ‹ƒOƒ‹[ƒvV‹Kì¬
 ################################################
 function Create-Group( $GroupName ) {
     $hostname = hostname
@@ -583,7 +537,7 @@ function Create-Group( $GroupName ) {
 
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—å–å¾—
+# ƒ[ƒJƒ‹ƒOƒ‹[ƒvæ“¾
 ################################################
 function Get-LocalGroups() {
     $hostname = hostname
@@ -593,7 +547,7 @@ function Get-LocalGroups() {
 }
 
 ################################################
-# ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—ãŒå­˜åœ¨ã™ã‚‹ã‹
+# ƒ[ƒJƒ‹ƒOƒ‹[ƒv‚ª‘¶İ‚·‚é‚©
 ################################################
 function Test-Group( $GroupName ) {
     $hostname = hostname
@@ -604,7 +558,7 @@ function Test-Group( $GroupName ) {
 
 
 ################################################
-# ã‚°ãƒ«ãƒ¼ãƒ—ã¸å‚åŠ 
+# ƒOƒ‹[ƒv‚ÖQ‰Á
 ################################################
 function Join-Group( $UserID, $JoinGroup ) {
     $hostname = hostname
@@ -615,8 +569,8 @@ function Join-Group( $UserID, $JoinGroup ) {
 
 
 ########################################################################################
-# ã‚°ãƒ«ãƒ¼ãƒ—ã¸å‚åŠ 
-#  IIS APPPOOL\xx ã¨ã‹ã®ä¸€èˆ¬çš„ãªãƒ¦ãƒ¼ã‚¶ãƒ¼ã§ã¯ãªã„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ãƒ­ãƒ¼ã‚«ãƒ«ã‚°ãƒ«ãƒ¼ãƒ—è¿½åŠ å¯¾å¿œ
+# ƒOƒ‹[ƒv‚ÖQ‰Á
+#  IIS APPPOOL\xx ‚Æ‚©‚Ìˆê”Ê“I‚Èƒ†[ƒU[‚Å‚Í‚È‚¢ƒAƒJƒEƒ“ƒg‚Æƒ[ƒJƒ‹ƒOƒ‹[ƒv’Ç‰Á‘Î‰
 ########################################################################################
 function Join-Group2( $UserID, $JoinGroup ) {
     $hostname = hostname
@@ -629,7 +583,7 @@ function Join-Group2( $UserID, $JoinGroup ) {
 
 
 ################################################
-# ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—æ™‚ã®æ‹¡å¼µPINã‚’æœ‰åŠ¹åŒ–
+# ƒXƒ^[ƒgƒAƒbƒv‚ÌŠg’£PIN‚ğ—LŒø‰»
 ################################################
 function Enable-SaveRecoveryPassInAD {
     $RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\FVE"
@@ -646,13 +600,13 @@ function Enable-SaveRecoveryPassInAD {
 
 
 ################################################
-# ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—æ™‚ã®æ‹¡å¼µPINã‚’æœ‰åŠ¹åŒ–
+# ƒXƒ^[ƒgƒAƒbƒv‚ÌŠg’£PIN‚ğ—LŒø‰»
 ################################################
 function Enable-StartupPin {
 
     $RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\FVE"
 
-    # ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—æ™‚ã«è¿½åŠ ã®èªè¨¼ã‚’è¦æ±‚ã™ã‚‹
+    # ƒXƒ^[ƒgƒAƒbƒv‚É’Ç‰Á‚Ì”FØ‚ğ—v‹‚·‚é
     if ((Get-Registry $RegPath "EnableBDEWithNoTPM") -ne 1) {
         Set-Registry $RegPath "EnableBDEWithNoTPM" "DWord" 1
     }
@@ -672,7 +626,7 @@ function Enable-StartupPin {
         Set-Registry $RegPath "UseTPMPIN" "DWord" 2
     }
 
-    # ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã®æ‹¡å¼µ PIN ã‚’è¨±å¯ã™ã‚‹
+    # ƒXƒ^[ƒgƒAƒbƒv‚ÌŠg’£ PIN ‚ğ‹–‰Â‚·‚é
     if ((Get-Registry $RegPath "UseEnhancedPin") -ne 1) {
         Set-Registry $RegPath "UseEnhancedPin" "DWord" 1
     }
@@ -680,36 +634,36 @@ function Enable-StartupPin {
 
 
 ################################################
-# ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®å‰²ã‚Šå½“ã¦
+# ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌŠ„‚è“–‚Ä
 ################################################
 function Add-NetworkDrive($driveLetter, $drivePath, $userName, $userPass) {
     if ($driveLetter -eq "") {
         return $false
     }
     if ($userName -ne "") {
-        # èªè¨¼æƒ…å ±ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+        # ”FØî•ñ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
         $securePass = ConvertTo-SecureString $userPass -AsPlainText -Force
         $cred = New-Object System.Management.Automation.PSCredential $userName, $securePass
         New-PSDrive -Persist -Name $driveLetter -PSProvider FileSystem -Root $drivePath -Credential $cred
     }
     else {
-        # èªè¨¼æƒ…å ±ä¸è¦ã§æ¥ç¶š
+        # ”FØî•ñ•s—v‚ÅÚ‘±
         New-PSDrive -Persist -Name $driveLetter -PSProvider FileSystem -Root $drivePath
     }
 }
 
 
 ################################################
-# key.txt ã¨ encryptedtxt ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å¾©å·åŒ–
+# key.txt ‚Æ encryptedtxt ƒtƒ@ƒCƒ‹‚©‚çƒpƒXƒ[ƒh‚ğ•œ†‰»
 ################################################
 function Decryption-Password($keyFilePath, $encryptedFilePath ) {
-    # æš—å·åŒ–ã§ä½¿ç”¨ã—ãŸãƒã‚¤ãƒˆé…åˆ—ã‚’ç”¨æ„
+    # ˆÃ†‰»‚Åg—p‚µ‚½ƒoƒCƒg”z—ñ‚ğ—pˆÓ
     [byte[]] $EncryptedKey = Get-Content $keyFilePath
 
-    # æš—å·åŒ–ã•ã‚ŒãŸæ¨™æº–æ–‡å­—åˆ—ã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¦SecureStringã«å¤‰æ›
+    # ˆÃ†‰»‚³‚ê‚½•W€•¶š—ñ‚ğƒCƒ“ƒ|[ƒg‚µ‚ÄSecureString‚É•ÏŠ·
     $importSecureString = Get-Content $encryptedFilePath | ConvertTo-SecureString -key $EncryptedKey
 
-    # SecureStringã‹ã‚‰æ–‡å­—åˆ—ã‚’å–ã‚Šå‡ºã™ãŠã¾ã˜ãªã„
+    # SecureString‚©‚ç•¶š—ñ‚ğæ‚èo‚·‚¨‚Ü‚¶‚È‚¢
     $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($importSecureString)
     $StringPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
     return $StringPassword
@@ -717,9 +671,9 @@ function Decryption-Password($keyFilePath, $encryptedFilePath ) {
 
 
 ################################################
-# Pause æ©Ÿèƒ½è¿½åŠ 
+# Pause ‹@”\’Ç‰Á
 ################################################
 function Pause() {
-    Write-Host "ç¶šè¡Œã™ã‚‹ã«ã¯ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„..." -NoNewLine
+    Write-Host "‘±s‚·‚é‚É‚Í‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢..." -NoNewLine
     [Console]::ReadKey() | Out-Null
 }
