@@ -81,6 +81,3 @@ Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifi
 # ログ出力終了
 Stop-Transcript
 Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifier.token
-
-# ログ出力終了
-Stop-Transcript
