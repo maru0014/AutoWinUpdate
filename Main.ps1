@@ -27,11 +27,20 @@ Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
 if ($config.upgradeWindows) {
-  $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
-  if (1909 -gt $winver) {
-    # 1909未満のバージョンの場合1909をインストール
-    Write-Host "$(Get-Date -Format g) Windows10 $($winver) → 1909アップグレード実行"
-    Start-Process -FilePath ($PSScriptRoot + "/1909/setup.exe") -argumentList "/Auto Upgrade" -Wait
+  $dir = 'C:\AutoWinUpdate\_Windows_FU\packages'
+  if (-not (Test-Path $dir)) {
+    # 作業用フォルダ作成
+    mkdir $dir
+
+    # Window10更新アシスタントをダウンロード
+    $webClient = New-Object System.Net.WebClient
+    $url = 'https://go.microsoft.com/fwlink/?LinkID=799445'
+    $file = "$($dir)\Win10Upgrade.exe"
+    $webClient.DownloadFile($url,$file)
+
+    # サイレントインストール
+    Start-Process -FilePath $file -ArgumentList '/skipeula /auto upgrade /UninstallUponUpgrade' -Wait
+    Exit
   }
 }
 
