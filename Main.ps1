@@ -50,6 +50,7 @@ if ($config.upgradeWindows.flag) {
 
 Write-Host "`r`n***************** ç≈êVÇ‹Ç≈Windows Update *****************" -ForeGroundColor green
 if(-not (Get-Module -ListAvailable -Name PSWindowsUpdate)){
+  Install-PackageProvider -Name NuGet -Force
   Install-Module -Name PSWindowsUpdate -Force
 }
 Import-Module -Name PSWindowsUpdate
