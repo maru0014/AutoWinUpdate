@@ -26,31 +26,34 @@ Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 # スケジューラにログオンスクリプト登録
 Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
-if ($config.upgradeWindows) {
-  $dir = 'C:\AutoWinUpdate\_Windows_FU\packages'
-  if (-not (Test-Path $dir)) {
-    # 作業用フォルダ作成
-    mkdir $dir
+if ($config.upgradeWindows.flag) {
+  $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
+  if ($config.upgradeWindows.ver -gt $winver) {
+    Write-Host "`r`n***************** Windows 10 更新アシスタント実行 *****************" -ForeGroundColor green
+    $dir = 'C:\AutoWinUpdate\_Windows_FU\packages'
+    if (-not (Test-Path $dir)) {
+      # 作業用フォルダ作成
+      mkdir $dir
 
-    # Window10更新アシスタントをダウンロード
-    $webClient = New-Object System.Net.WebClient
-    $url = 'https://go.microsoft.com/fwlink/?LinkID=799445'
-    $file = "$($dir)\Win10Upgrade.exe"
-    $webClient.DownloadFile($url,$file)
+      # Window10更新アシスタントをダウンロード
+      $webClient = New-Object System.Net.WebClient
+      $url = 'https://go.microsoft.com/fwlink/?LinkID=799445'
+      $file = "$($dir)\Win10Upgrade.exe"
+      $webClient.DownloadFile($url, $file)
 
-    # サイレントインストール
-    Start-Process -FilePath $file -ArgumentList '/skipeula /auto upgrade /UninstallUponUpgrade' -Wait
-    Exit
+      # サイレントインストール
+      Start-Process -FilePath $file -ArgumentList '/skipeula /auto upgrade /UninstallUponUpgrade' -Wait
+      Exit
+    }
   }
 }
 
 Write-Host "`r`n***************** 最新までWindows Update *****************" -ForeGroundColor green
-Install-Module -Name PSWindowsUpdate -Force
+if(-not (Get-Module -ListAvailable -Name PSWindowsUpdate)){
+  Install-Module -Name PSWindowsUpdate -Force
+}
 Import-Module -Name PSWindowsUpdate
 Install-WindowsUpdate -AcceptAll -AutoReboot
-
-# Run-LegacyWindowsUpdate "Full"
-# Run-WindowsUpdate
 
 
 # Taskを削除

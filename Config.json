@@ -1,6 +1,9 @@
 [
   {
-    "upgradeWindows": true,
+    "upgradeWindows": {
+      "flag": true,
+      "ver": 2004
+    },
     "setupUser": {
       "name": "setup",
       "pass": "Setup1234"
