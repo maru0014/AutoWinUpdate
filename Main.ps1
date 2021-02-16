@@ -5,8 +5,8 @@ Write-Host @"
 *********************************************************
 *
 * Windows10 Auto Updating Script / Main.ps1
-* バージョン : 1.20
-* 最終更新日 : 2020/10/13
+* バージョン : 1.21
+* 最終更新日 : 2021/02/16
 *
 "@ -ForeGroundColor green
 
@@ -49,13 +49,22 @@ if ($config.upgradeWindows.flag) {
 }
 
 Write-Host "`r`n***************** 最新までWindows Update *****************" -ForeGroundColor green
-if(-not (Get-Module -ListAvailable -Name PSWindowsUpdate)){
+if (-not (Get-Module -ListAvailable -Name PSWindowsUpdate)) {
+  # PSWindowsUpdateモジュールがなければインストール
   Install-PackageProvider -Name NuGet -Force
   Install-Module -Name PSWindowsUpdate -Force
 }
-Import-Module -Name PSWindowsUpdate
-Install-WindowsUpdate -AcceptAll -AutoReboot
 
+# PSWindowsUpdateを実行
+Import-Module -Name PSWindowsUpdate
+Install-WindowsUpdate -AcceptAll -IgnoreRestart
+
+# 再起動が必要か確認
+if (Get-WURebootStatus -Silent) {
+  Write-Host "$(Get-Date -Format g) 再起動が必要な更新プログラムがあるため再起動します。"
+  Restart-Computer -Force
+  Exit
+}
 
 # Taskを削除
 if (Test-Task "AutoWinUpdate") {
