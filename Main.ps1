@@ -89,4 +89,3 @@ Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifi
 
 # ƒƒOo—ÍI—¹
 Stop-Transcript
-Send-Chat $compliteMsg $config.notifier.chat $config.notifier.url $config.notifier.token
