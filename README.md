@@ -44,6 +44,6 @@ notifier...slack/chatwork/teams/hangout のいずれかと WebHookURL をセッ�
 **USB メモリから実行する場合**
 
 1. USB メモリなどに AutoWinUpdate フォルダを作成して各ファイルを配置
-2. 実行対象端末の C ドライブ直下に AutoWinUpdate フォルダをコピー
+2. 実行対象端末の Cドライブ直下に AutoWinUpdate フォルダをコピー
 3. 「Run-PS.bat」を管理者権限で実行
 4. 完了通知が来るまで放置
