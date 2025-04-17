@@ -5,8 +5,8 @@ Write-Host @"
 *********************************************************
 *
 * Windows10 Auto Updating Script / Main.ps1
-* バージョン : 1.21
-* 最終更新日 : 2021/02/16
+* バージョン : 1.22
+* 最終更新日 : 2025/04/17
 *
 "@ -ForeGroundColor green
 
@@ -57,7 +57,7 @@ if (-not (Get-Module -ListAvailable -Name PSWindowsUpdate)) {
 
 # PSWindowsUpdateを実行
 Import-Module -Name PSWindowsUpdate
-Install-WindowsUpdate -AcceptAll -IgnoreRestart
+Install-WindowsUpdate -AcceptAll -IgnoreReboot
 
 # 再起動が必要か確認
 if (Get-WURebootStatus -Silent) {
