@@ -27,7 +27,7 @@ Enable-AutoLogon $config.setupuser.name $config.setupuser.pass
 Register-Task "AutoWinUpdate" "$PSScriptRoot\Run-PS.bat" $config.setupuser.name $config.setupuser.pass
 
 if ($config.upgradeWindows.flag) {
-  $winver = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ReleaseId).ReleaseId
+  $winver = Get-Registry "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" "ReleaseId"
   if ($config.upgradeWindows.ver -gt $winver) {
     Write-Host "`r`n***************** Windows 10 更新アシスタント実行 *****************" -ForeGroundColor green
     $dir = 'C:\AutoWinUpdate\_Windows_FU\packages'
